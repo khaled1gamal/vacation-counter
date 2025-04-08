@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>عداد تنازلي</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        height: 90vh;
+        font-family: Arial, sans-serif;
+        direction: rtl;
+        display: flex;
+        text-align: center;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #f2f2f2;
+      }
+      h1 {
+        font-size: 3.5rem;
+        color: #333;
+        margin-bottom: 30px;
+      }
+      #countdown {
+        font-size: 5rem;
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>العد التنازلي حتى 6 يونيو 2025 <br>الساعة 08:10 صباحًا</h1>
+    <div dir="ltr" id="countdown">جارٍ الحساب...</div>
+
+    <script>
+      // تحديد التاريخ والوقت النهائي
+      const targetDate = new Date("2025-06-06T08:10:00");
+
+      function updateCountdown() {
+        const now = new Date();
+        const difference = targetDate - now;
+
+        if (difference <= 0) {
+          document.getElementById("countdown").innerText =
+            "انتهى العد التنازلي!";
+          clearInterval(countdownInterval);
+          return;
+        }
+
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        const minutes = Math.floor(
+          (difference % (1000 * 60 * 60)) / (1000 * 60)
+        );
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+        function pluralize(value, unit) {
+          return `${value} ${unit}${value !== 1 ? "s" : ""}`;
+        }
+
+        document.getElementById(
+          "countdown"
+        ).innerHTML =  `${pluralize(days, 'day')}, ${pluralize(hours, 'hour')}<br> ${pluralize(minutes, 'minute')}, ${pluralize(seconds, 'second')}`;
+      
+      }
+
+      // تحديث العداد كل ثانية
+      const countdownInterval = setInterval(updateCountdown, 1000);
+      updateCountdown(); // أول تحديث مباشر
+    </script>
+  </body>
+</html>

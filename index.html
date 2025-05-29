@@ -12,6 +12,7 @@
       }
       body {
         height: 90vh;
+        margin-top: -10%;
         font-family: Arial, sans-serif;
         direction: rtl;
         display: flex;
@@ -22,32 +23,33 @@
         background-color: #f2f2f2;
       }
       h1 {
-        font-size: 3.5rem;
+        font-size: 3.7rem;
         color: #333;
         margin-bottom: 30px;
       }
       #countdown {
-        font-size: 5rem;
+        font-size: 6rem;
         color: #333;
       }
     </style>
   </head>
   <body>
-    <h1>العد التنازلي حتى 6 يونيو 2025 <br>الساعة 08:10 صباحًا</h1>
-    <div dir="ltr" id="countdown">جارٍ الحساب...</div>
-
+    <h1 id="title"></h1>
+    <div dir="rtl" id="countdown">جارٍ الحساب...</div>
     <script>
       // تحديد التاريخ والوقت النهائي
-      const targetDate = new Date("2025-06-06T08:10:00");
+      const targetDate = new Date("2025-06-06T12:10:00");
 
-      function updateCountdown() {
+      // دالة لتحديث العداد التنازلي للعودة إلى قطر بشكل ديناميكي
+      function updateCountdownToQatar() {
         const now = new Date();
-        const difference = targetDate - now;
+        const backToQatar = new Date("2025-07-25T21:20:00");
+        const difference = backToQatar - now;
 
         if (difference <= 0) {
           document.getElementById("countdown").innerText =
-            "انتهى العد التنازلي!";
-          clearInterval(countdownInterval);
+            "تمت العودة إلى قطر!";
+          clearInterval(countdownIntervalQatar);
           return;
         }
 
@@ -59,19 +61,45 @@
           (difference % (1000 * 60 * 60)) / (1000 * 60)
         );
         const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-        function pluralize(value, unit) {
-          return `${value} ${unit}${value !== 1 ? "s" : ""}`;
-        }
-
+        document.getElementById("title").innerText =
+          "متبقي حتى العودة إلى قطر ";
         document.getElementById(
           "countdown"
-        ).innerHTML =  `${pluralize(days, 'day')}, ${pluralize(hours, 'hour')}<br> ${pluralize(minutes, 'minute')}, ${pluralize(seconds, 'second')}`;
-      
+        ).innerHTML = ` ${days} يوم،<br> ${hours} ساعة، ${minutes} دقيقة،<br> ${seconds} ثانية`;
+      }
+
+      function updateCountdown() {
+        const now = new Date();
+        const difference = targetDate - now;
+
+        if (difference <= 0) {
+          document.getElementById("countdown").innerText =
+            "انتهى العد التنازلي!";
+          clearInterval(countdownInterval);
+          // بدء عداد العودة إلى قطر
+          countdownIntervalQatar = setInterval(updateCountdownToQatar, 1000);
+          updateCountdownToQatar();
+          return;
+        }
+
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        const minutes = Math.floor(
+          (difference % (1000 * 60 * 60)) / (1000 * 60)
+        );
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+        document.getElementById("title").innerHTML =
+          `العد التنازلي حتى 6 يونيو 2025<br>الساعة 12:10 صباحًا`;
+        document.getElementById(
+          "countdown"
+        ).innerHTML = `${days} يوم،<br> ${hours} ساعة، ${minutes} دقيقة،<br> ${seconds} ثانية`;
       }
 
       // تحديث العداد كل ثانية
-      const countdownInterval = setInterval(updateCountdown, 1000);
+      let countdownInterval = setInterval(updateCountdown, 1000);
+      let countdownIntervalQatar; // متغير عالمي للعداد الثاني
       updateCountdown(); // أول تحديث مباشر
     </script>
   </body>
